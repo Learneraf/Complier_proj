@@ -8,7 +8,7 @@ set "ANTLR_JAR_PATH=D:\Edge_download\antlr-4.13.2-complete.jar"
 :: ANTLR4完整jar包路径
 set "GRAMMAR_FILE=DOT.g4"
 :: .g4语法文件名
-set "TEST_FILE=test_dot_1.dot"
+set "TEST_FILE=test_dot_3.dot"
 :: 测试文件名称
 set "GRAMMAR_NAME=DOT"
 :: 语法名称（和.g4文件中的grammar名称一致，如CSV、Expr）

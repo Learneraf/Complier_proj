@@ -8,7 +8,7 @@ set "ANTLR_JAR_PATH=D:\Edge_download\antlr-4.13.2-complete.jar"
 :: ANTLR4完整jar包路径
 set "GRAMMAR_FILE=JSON.g4"
 :: .g4语法文件名
-set "TEST_FILE=test_json_1.json"
+set "TEST_FILE=test_json_3.json"
 :: 测试文件名称
 set "GRAMMAR_NAME=JSON"
 :: 语法名称（和.g4文件中的grammar名称一致，如CSV、Expr）

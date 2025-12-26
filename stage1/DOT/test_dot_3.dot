@@ -1,0 +1,3 @@
+digraph Test1 {
+    a [label=<<table><tr><td>test</td></tr></table>>]
+}

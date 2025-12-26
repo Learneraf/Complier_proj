@@ -1,18 +1,20 @@
 grammar CSV;
 
-file : hdr row+ ;
-hdr : row ;
+file : rows EOF ;
 
-row : field (',' field)* '\r'? '\n' ;
+rows
+    : row (NL row)*  // 至少一行，然后可以有多行
+    |                // 或者空文件
+    ;
+
+row : field (',' field)* ;
 
 field
     : TEXT
     | STRING
-    | // empty field
+    |
     ;
 
-TEXT : [a-zA-Z0-9 ]+ ; 
-STRING : '"' ( '""' | ~'"' )* '"' ; 
-
+TEXT : ~[,\r\n"]+ ;
+STRING : '"' ('""' | ~'"')* '"' ;
 NL : '\r'? '\n' ;
-WS : [ \t]+ -> skip ;

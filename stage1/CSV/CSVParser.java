@@ -16,25 +16,25 @@ public class CSVParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, TEXT=4, STRING=5, NL=6, WS=7;
+		T__0=1, TEXT=2, STRING=3, NL=4;
 	public static final int
-		RULE_file = 0, RULE_hdr = 1, RULE_row = 2, RULE_field = 3;
+		RULE_file = 0, RULE_rows = 1, RULE_row = 2, RULE_field = 3;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"file", "hdr", "row", "field"
+			"file", "rows", "row", "field"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "','", "'\\r'", "'\\n'"
+			null, "','"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, "TEXT", "STRING", "NL", "WS"
+			null, null, "TEXT", "STRING", "NL"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -90,15 +90,10 @@ public class CSVParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FileContext extends ParserRuleContext {
-		public HdrContext hdr() {
-			return getRuleContext(HdrContext.class,0);
+		public RowsContext rows() {
+			return getRuleContext(RowsContext.class,0);
 		}
-		public List<RowContext> row() {
-			return getRuleContexts(RowContext.class);
-		}
-		public RowContext row(int i) {
-			return getRuleContext(RowContext.class,i);
-		}
+		public TerminalNode EOF() { return getToken(CSVParser.EOF, 0); }
 		public FileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -116,26 +111,13 @@ public class CSVParser extends Parser {
 	public final FileContext file() throws RecognitionException {
 		FileContext _localctx = new FileContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_file);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(8);
-			hdr();
-			setState(10); 
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			do {
-				{
-				{
-				setState(9);
-				row();
-				}
-				}
-				setState(12); 
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 62L) != 0) );
+			rows();
+			setState(9);
+			match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -150,32 +132,67 @@ public class CSVParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class HdrContext extends ParserRuleContext {
-		public RowContext row() {
-			return getRuleContext(RowContext.class,0);
+	public static class RowsContext extends ParserRuleContext {
+		public List<RowContext> row() {
+			return getRuleContexts(RowContext.class);
 		}
-		public HdrContext(ParserRuleContext parent, int invokingState) {
+		public RowContext row(int i) {
+			return getRuleContext(RowContext.class,i);
+		}
+		public List<TerminalNode> NL() { return getTokens(CSVParser.NL); }
+		public TerminalNode NL(int i) {
+			return getToken(CSVParser.NL, i);
+		}
+		public RowsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_hdr; }
+		@Override public int getRuleIndex() { return RULE_rows; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CSVListener ) ((CSVListener)listener).enterHdr(this);
+			if ( listener instanceof CSVListener ) ((CSVListener)listener).enterRows(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CSVListener ) ((CSVListener)listener).exitHdr(this);
+			if ( listener instanceof CSVListener ) ((CSVListener)listener).exitRows(this);
 		}
 	}
 
-	public final HdrContext hdr() throws RecognitionException {
-		HdrContext _localctx = new HdrContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_hdr);
+	public final RowsContext rows() throws RecognitionException {
+		RowsContext _localctx = new RowsContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_rows);
+		int _la;
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(14);
-			row();
+			setState(20);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(11);
+				row();
+				setState(16);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==NL) {
+					{
+					{
+					setState(12);
+					match(NL);
+					setState(13);
+					row();
+					}
+					}
+					setState(18);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -218,36 +235,24 @@ public class CSVParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(16);
+			setState(22);
 			field();
-			setState(21);
+			setState(27);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(17);
+				setState(23);
 				match(T__0);
-				setState(18);
+				setState(24);
 				field();
 				}
 				}
-				setState(23);
+				setState(29);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(25);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==T__1) {
-				{
-				setState(24);
-				match(T__1);
-				}
-			}
-
-			setState(27);
-			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -283,26 +288,26 @@ public class CSVParser extends Parser {
 		FieldContext _localctx = new FieldContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_field);
 		try {
-			setState(32);
+			setState(33);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case TEXT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(29);
+				setState(30);
 				match(TEXT);
 				}
 				break;
 			case STRING:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(30);
+				setState(31);
 				match(STRING);
 				}
 				break;
+			case EOF:
 			case T__0:
-			case T__1:
-			case T__2:
+			case NL:
 				enterOuterAlt(_localctx, 3);
 				{
 				}
@@ -323,30 +328,31 @@ public class CSVParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0007#\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
-		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0001\u0000\u0001\u0000\u0004"+
-		"\u0000\u000b\b\u0000\u000b\u0000\f\u0000\f\u0001\u0001\u0001\u0001\u0001"+
-		"\u0002\u0001\u0002\u0001\u0002\u0005\u0002\u0014\b\u0002\n\u0002\f\u0002"+
-		"\u0017\t\u0002\u0001\u0002\u0003\u0002\u001a\b\u0002\u0001\u0002\u0001"+
-		"\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003!\b\u0003\u0001"+
-		"\u0003\u0000\u0000\u0004\u0000\u0002\u0004\u0006\u0000\u0000#\u0000\b"+
-		"\u0001\u0000\u0000\u0000\u0002\u000e\u0001\u0000\u0000\u0000\u0004\u0010"+
-		"\u0001\u0000\u0000\u0000\u0006 \u0001\u0000\u0000\u0000\b\n\u0003\u0002"+
-		"\u0001\u0000\t\u000b\u0003\u0004\u0002\u0000\n\t\u0001\u0000\u0000\u0000"+
-		"\u000b\f\u0001\u0000\u0000\u0000\f\n\u0001\u0000\u0000\u0000\f\r\u0001"+
-		"\u0000\u0000\u0000\r\u0001\u0001\u0000\u0000\u0000\u000e\u000f\u0003\u0004"+
-		"\u0002\u0000\u000f\u0003\u0001\u0000\u0000\u0000\u0010\u0015\u0003\u0006"+
-		"\u0003\u0000\u0011\u0012\u0005\u0001\u0000\u0000\u0012\u0014\u0003\u0006"+
-		"\u0003\u0000\u0013\u0011\u0001\u0000\u0000\u0000\u0014\u0017\u0001\u0000"+
-		"\u0000\u0000\u0015\u0013\u0001\u0000\u0000\u0000\u0015\u0016\u0001\u0000"+
-		"\u0000\u0000\u0016\u0019\u0001\u0000\u0000\u0000\u0017\u0015\u0001\u0000"+
-		"\u0000\u0000\u0018\u001a\u0005\u0002\u0000\u0000\u0019\u0018\u0001\u0000"+
-		"\u0000\u0000\u0019\u001a\u0001\u0000\u0000\u0000\u001a\u001b\u0001\u0000"+
-		"\u0000\u0000\u001b\u001c\u0005\u0003\u0000\u0000\u001c\u0005\u0001\u0000"+
-		"\u0000\u0000\u001d!\u0005\u0004\u0000\u0000\u001e!\u0005\u0005\u0000\u0000"+
-		"\u001f!\u0001\u0000\u0000\u0000 \u001d\u0001\u0000\u0000\u0000 \u001e"+
-		"\u0001\u0000\u0000\u0000 \u001f\u0001\u0000\u0000\u0000!\u0007\u0001\u0000"+
-		"\u0000\u0000\u0004\f\u0015\u0019 ";
+		"\u0004\u0001\u0004$\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0001\u0000\u0001\u0000\u0001"+
+		"\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0005\u0001\u000f\b\u0001\n"+
+		"\u0001\f\u0001\u0012\t\u0001\u0001\u0001\u0003\u0001\u0015\b\u0001\u0001"+
+		"\u0002\u0001\u0002\u0001\u0002\u0005\u0002\u001a\b\u0002\n\u0002\f\u0002"+
+		"\u001d\t\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003\"\b\u0003"+
+		"\u0001\u0003\u0000\u0000\u0004\u0000\u0002\u0004\u0006\u0000\u0000$\u0000"+
+		"\b\u0001\u0000\u0000\u0000\u0002\u0014\u0001\u0000\u0000\u0000\u0004\u0016"+
+		"\u0001\u0000\u0000\u0000\u0006!\u0001\u0000\u0000\u0000\b\t\u0003\u0002"+
+		"\u0001\u0000\t\n\u0005\u0000\u0000\u0001\n\u0001\u0001\u0000\u0000\u0000"+
+		"\u000b\u0010\u0003\u0004\u0002\u0000\f\r\u0005\u0004\u0000\u0000\r\u000f"+
+		"\u0003\u0004\u0002\u0000\u000e\f\u0001\u0000\u0000\u0000\u000f\u0012\u0001"+
+		"\u0000\u0000\u0000\u0010\u000e\u0001\u0000\u0000\u0000\u0010\u0011\u0001"+
+		"\u0000\u0000\u0000\u0011\u0015\u0001\u0000\u0000\u0000\u0012\u0010\u0001"+
+		"\u0000\u0000\u0000\u0013\u0015\u0001\u0000\u0000\u0000\u0014\u000b\u0001"+
+		"\u0000\u0000\u0000\u0014\u0013\u0001\u0000\u0000\u0000\u0015\u0003\u0001"+
+		"\u0000\u0000\u0000\u0016\u001b\u0003\u0006\u0003\u0000\u0017\u0018\u0005"+
+		"\u0001\u0000\u0000\u0018\u001a\u0003\u0006\u0003\u0000\u0019\u0017\u0001"+
+		"\u0000\u0000\u0000\u001a\u001d\u0001\u0000\u0000\u0000\u001b\u0019\u0001"+
+		"\u0000\u0000\u0000\u001b\u001c\u0001\u0000\u0000\u0000\u001c\u0005\u0001"+
+		"\u0000\u0000\u0000\u001d\u001b\u0001\u0000\u0000\u0000\u001e\"\u0005\u0002"+
+		"\u0000\u0000\u001f\"\u0005\u0003\u0000\u0000 \"\u0001\u0000\u0000\u0000"+
+		"!\u001e\u0001\u0000\u0000\u0000!\u001f\u0001\u0000\u0000\u0000! \u0001"+
+		"\u0000\u0000\u0000\"\u0007\u0001\u0000\u0000\u0000\u0004\u0010\u0014\u001b"+
+		"!";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

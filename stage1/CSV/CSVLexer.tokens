@@ -1,10 +1,5 @@
 T__0=1
-T__1=2
-T__2=3
-TEXT=4
-STRING=5
-NL=6
-WS=7
+TEXT=2
+STRING=3
+NL=4
 ','=1
-'\r'=2
-'\n'=3

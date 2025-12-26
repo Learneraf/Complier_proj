@@ -1,0 +1,73 @@
+PS C:\Users\yanyu\Desktop\stage3> javac -encoding UTF-8 *.java
+注: 某些输入文件使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+PS C:\Users\yanyu\Desktop\stage3> java SuperCompiler .\test_complete.go  
+正在启动语法树可视化窗口...
+
+=================================================
+   Phase 4: 编译器优化与分析报告 (Bonus)
+=================================================
+[OPT] [Line 7] 常量折叠优化 (Constant Folding): 编译期直接计算表达式 '100+200'，替换为结果 '300'。
+[OPT] [Line 10] 代数化简优化 (Algebraic Simplification): 检测到乘零操作，直接替换为 '0'，消除乘法指令。
+[OPT] [Line 20] 死代码消除 (Dead Code Elimination): 检测到 return 后的不可达代码，已自动移除。
+
+----------------- 静态分析警告 ------------------
+[WARN] [Line 4] 静态分析警告: 变量 'unused' 已声明但从未被引用。
+
+=================================================
+   Phase 3b: 中间代码生成 (Quadruples)
+=================================================
+a = 10
+b = 300
+a = 0
+t1 = b > 50
+if t1 goto L1
+goto L2
+L1:
+t2 = a + 1
+a = t2
+goto L3
+L2:
+L3:
+return 0
+
+=================================================
+   Phase 3c: 目标代码生成 (x86 Assembly)
+=================================================
+.section .data
+        a: .long 0
+        b: .long 0
+        t1: .long 0
+        t2: .long 0
+
+.section .text
+.global main
+main:
+        MOV EAX, 10
+        MOV [a], EAX
+        MOV EAX, 300
+        MOV [b], EAX
+        MOV EAX, 0
+        MOV [a], EAX
+        MOV EAX, [b]
+        CMP EAX, 50
+        SETG AL
+        MOVZX EAX, AL
+        MOV [t1], EAX
+        MOV EAX, [t1]
+        CMP EAX, 0
+        JNE L1
+        JMP L2
+L1:
+        MOV EAX, [a]
+        ADD EAX, 1
+        MOV [t2], EAX
+        MOV EAX, [t2]
+        MOV [a], EAX
+        JMP L3
+L2:
+L3:
+        MOV EAX, 1
+        INT 0x80
+        MOV EAX, 1
+        INT 0x80

@@ -1,0 +1,9 @@
+{
+  "player": {
+    "name": "Hero",
+    "level": 99,
+    "is_active": true,
+    "inventory": [ "Sword", "Shield", null ],
+    "stats": { "hp": 100.5, "mp": 50 }
+  }
+}

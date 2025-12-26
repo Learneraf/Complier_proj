@@ -1,0 +1,7 @@
+digraph FamilyTree {
+    node [shape=box];
+    Grandpa -> Father;
+    Grandma -> Father;
+    Father -> Me;
+    Mother -> Me;
+}

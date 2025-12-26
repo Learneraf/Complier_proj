@@ -1,0 +1,9 @@
+digraph FSM {
+    rankdir=LR;
+    node [shape=circle];
+    Start -> Idle;
+    Idle -> Processing [label="Input Received"];
+    Processing -> Idle [label="Done"];
+    Processing -> Error [label="Failure"];
+    Error -> Stop;
+}

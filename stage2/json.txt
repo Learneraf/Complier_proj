@@ -1,0 +1,29 @@
+PS C:\Users\yanyu\Desktop\stage2\JSON> java org.antlr.v4.Tool JSON.g4
+PS C:\Users\yanyu\Desktop\stage2\JSON> javac -encoding UTF-8 *.java
+注: JSON2XML.java使用或覆盖了已过时的 API。
+注: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+PS C:\Users\yanyu\Desktop\stage2\JSON> java JSON2XML test_json_1.json
+<player><name>Hero</name>
+<level>99</level>
+<is_active>true</is_active>
+<inventory><element>Sword</element>
+<element>Shield</element>
+<element>null</element>
+</inventory>
+<stats><hp>100.5</hp>
+<mp>50</mp>
+</stats>
+</player>
+
+PS C:\Users\yanyu\Desktop\stage2\JSON> java JSON2XML test_json_2.json
+<library_name>City Library</library_name>
+<open>true</open>
+<books><element><title>ANTLR 4 Reference</title>
+<author>Terence Parr</author>
+<price>3.5e1</price>
+</element>
+<element><title>The Go Programming Language</title>
+<isbn>978-0134190440</isbn>
+<available>false</available>
+</element>
+</books>

@@ -1,0 +1,16 @@
+{
+  "library_name": "City Library",
+  "open": true,
+  "books": [
+    {
+      "title": "ANTLR 4 Reference",
+      "author": "Terence Parr",
+      "price": 3.5e1
+    },
+    {
+      "title": "The Go Programming Language",
+      "isbn": "978-0134190440",
+      "available": false
+    }
+  ]
+}

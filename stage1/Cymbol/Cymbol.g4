@@ -2,7 +2,8 @@ grammar Cymbol;
 
 file : (functionDecl | varDecl)+ ;
 
-varDecl : type ID ('=' expr)? ';' ;
+varDecl : type initDecl (',' initDecl)* ';' ;
+initDecl : ID ('=' expr)? ;
 type : 'float' | 'int' | 'void' ;
 
 functionDecl : type ID '(' formalParameters? ')' block ;

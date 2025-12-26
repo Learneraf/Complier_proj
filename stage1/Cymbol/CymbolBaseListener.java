@@ -40,6 +40,18 @@ public class CymbolBaseListener implements CymbolListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterInitDecl(CymbolParser.InitDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInitDecl(CymbolParser.InitDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterType(CymbolParser.TypeContext ctx) { }
 	/**
 	 * {@inheritDoc}

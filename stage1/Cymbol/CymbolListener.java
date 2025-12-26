@@ -27,6 +27,16 @@ public interface CymbolListener extends ParseTreeListener {
 	 */
 	void exitVarDecl(CymbolParser.VarDeclContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CymbolParser#initDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitDecl(CymbolParser.InitDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CymbolParser#initDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitDecl(CymbolParser.InitDeclContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CymbolParser#type}.
 	 * @param ctx the parse tree
 	 */

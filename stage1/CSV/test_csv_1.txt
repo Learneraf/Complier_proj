@@ -1,4 +1,4 @@
 StudentId, Name, Course, Score
-1001, "Yan Yuebin", "Computer Science", 95
-1002, "Yan Jinjin", "Math", 88
-1003, "", "Physics", 90
+1001,"Yan Yuebin","Computer Science",95
+1002,"Yan Jinjin","Math",88
+1003,"","Physics",90

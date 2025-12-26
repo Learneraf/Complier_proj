@@ -16,7 +16,7 @@ public class CSVParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, TEXT=2, STRING=3, NL=4;
+		T__0=1, T__1=2, T__2=3, TEXT=4, STRING=5, NL=6, WS=7;
 	public static final int
 		RULE_file = 0, RULE_hdr = 1, RULE_row = 2, RULE_field = 3;
 	private static String[] makeRuleNames() {
@@ -28,13 +28,13 @@ public class CSVParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "','"
+			null, "','", "'\\r'", "'\\n'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, "TEXT", "STRING", "NL"
+			null, null, null, null, "TEXT", "STRING", "NL", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -93,7 +93,6 @@ public class CSVParser extends Parser {
 		public HdrContext hdr() {
 			return getRuleContext(HdrContext.class,0);
 		}
-		public TerminalNode EOF() { return getToken(CSVParser.EOF, 0); }
 		public List<RowContext> row() {
 			return getRuleContexts(RowContext.class);
 		}
@@ -136,9 +135,7 @@ public class CSVParser extends Parser {
 				setState(12); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 30L) != 0) );
-			setState(14);
-			match(EOF);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 62L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -177,7 +174,7 @@ public class CSVParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(16);
+			setState(14);
 			row();
 			}
 		}
@@ -200,7 +197,6 @@ public class CSVParser extends Parser {
 		public FieldContext field(int i) {
 			return getRuleContext(FieldContext.class,i);
 		}
-		public TerminalNode NL() { return getToken(CSVParser.NL, 0); }
 		public RowContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -222,26 +218,36 @@ public class CSVParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(18);
+			setState(16);
 			field();
-			setState(23);
+			setState(21);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(19);
+				setState(17);
 				match(T__0);
-				setState(20);
+				setState(18);
 				field();
 				}
 				}
-				setState(25);
+				setState(23);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(26);
-			match(NL);
+			setState(25);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==T__1) {
+				{
+				setState(24);
+				match(T__1);
+				}
+			}
+
+			setState(27);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -277,25 +283,26 @@ public class CSVParser extends Parser {
 		FieldContext _localctx = new FieldContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_field);
 		try {
-			setState(31);
+			setState(32);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case TEXT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(28);
+				setState(29);
 				match(TEXT);
 				}
 				break;
 			case STRING:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(29);
+				setState(30);
 				match(STRING);
 				}
 				break;
 			case T__0:
-			case NL:
+			case T__1:
+			case T__2:
 				enterOuterAlt(_localctx, 3);
 				{
 				}
@@ -316,29 +323,30 @@ public class CSVParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0004\"\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u0007#\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0001\u0000\u0001\u0000\u0004"+
-		"\u0000\u000b\b\u0000\u000b\u0000\f\u0000\f\u0001\u0000\u0001\u0000\u0001"+
-		"\u0001\u0001\u0001\u0001\u0002\u0001\u0002\u0001\u0002\u0005\u0002\u0016"+
-		"\b\u0002\n\u0002\f\u0002\u0019\t\u0002\u0001\u0002\u0001\u0002\u0001\u0003"+
-		"\u0001\u0003\u0001\u0003\u0003\u0003 \b\u0003\u0001\u0003\u0000\u0000"+
-		"\u0004\u0000\u0002\u0004\u0006\u0000\u0000!\u0000\b\u0001\u0000\u0000"+
-		"\u0000\u0002\u0010\u0001\u0000\u0000\u0000\u0004\u0012\u0001\u0000\u0000"+
-		"\u0000\u0006\u001f\u0001\u0000\u0000\u0000\b\n\u0003\u0002\u0001\u0000"+
-		"\t\u000b\u0003\u0004\u0002\u0000\n\t\u0001\u0000\u0000\u0000\u000b\f\u0001"+
-		"\u0000\u0000\u0000\f\n\u0001\u0000\u0000\u0000\f\r\u0001\u0000\u0000\u0000"+
-		"\r\u000e\u0001\u0000\u0000\u0000\u000e\u000f\u0005\u0000\u0000\u0001\u000f"+
-		"\u0001\u0001\u0000\u0000\u0000\u0010\u0011\u0003\u0004\u0002\u0000\u0011"+
-		"\u0003\u0001\u0000\u0000\u0000\u0012\u0017\u0003\u0006\u0003\u0000\u0013"+
-		"\u0014\u0005\u0001\u0000\u0000\u0014\u0016\u0003\u0006\u0003\u0000\u0015"+
-		"\u0013\u0001\u0000\u0000\u0000\u0016\u0019\u0001\u0000\u0000\u0000\u0017"+
-		"\u0015\u0001\u0000\u0000\u0000\u0017\u0018\u0001\u0000\u0000\u0000\u0018"+
-		"\u001a\u0001\u0000\u0000\u0000\u0019\u0017\u0001\u0000\u0000\u0000\u001a"+
-		"\u001b\u0005\u0004\u0000\u0000\u001b\u0005\u0001\u0000\u0000\u0000\u001c"+
-		" \u0005\u0002\u0000\u0000\u001d \u0005\u0003\u0000\u0000\u001e \u0001"+
-		"\u0000\u0000\u0000\u001f\u001c\u0001\u0000\u0000\u0000\u001f\u001d\u0001"+
-		"\u0000\u0000\u0000\u001f\u001e\u0001\u0000\u0000\u0000 \u0007\u0001\u0000"+
-		"\u0000\u0000\u0003\f\u0017\u001f";
+		"\u0000\u000b\b\u0000\u000b\u0000\f\u0000\f\u0001\u0001\u0001\u0001\u0001"+
+		"\u0002\u0001\u0002\u0001\u0002\u0005\u0002\u0014\b\u0002\n\u0002\f\u0002"+
+		"\u0017\t\u0002\u0001\u0002\u0003\u0002\u001a\b\u0002\u0001\u0002\u0001"+
+		"\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003!\b\u0003\u0001"+
+		"\u0003\u0000\u0000\u0004\u0000\u0002\u0004\u0006\u0000\u0000#\u0000\b"+
+		"\u0001\u0000\u0000\u0000\u0002\u000e\u0001\u0000\u0000\u0000\u0004\u0010"+
+		"\u0001\u0000\u0000\u0000\u0006 \u0001\u0000\u0000\u0000\b\n\u0003\u0002"+
+		"\u0001\u0000\t\u000b\u0003\u0004\u0002\u0000\n\t\u0001\u0000\u0000\u0000"+
+		"\u000b\f\u0001\u0000\u0000\u0000\f\n\u0001\u0000\u0000\u0000\f\r\u0001"+
+		"\u0000\u0000\u0000\r\u0001\u0001\u0000\u0000\u0000\u000e\u000f\u0003\u0004"+
+		"\u0002\u0000\u000f\u0003\u0001\u0000\u0000\u0000\u0010\u0015\u0003\u0006"+
+		"\u0003\u0000\u0011\u0012\u0005\u0001\u0000\u0000\u0012\u0014\u0003\u0006"+
+		"\u0003\u0000\u0013\u0011\u0001\u0000\u0000\u0000\u0014\u0017\u0001\u0000"+
+		"\u0000\u0000\u0015\u0013\u0001\u0000\u0000\u0000\u0015\u0016\u0001\u0000"+
+		"\u0000\u0000\u0016\u0019\u0001\u0000\u0000\u0000\u0017\u0015\u0001\u0000"+
+		"\u0000\u0000\u0018\u001a\u0005\u0002\u0000\u0000\u0019\u0018\u0001\u0000"+
+		"\u0000\u0000\u0019\u001a\u0001\u0000\u0000\u0000\u001a\u001b\u0001\u0000"+
+		"\u0000\u0000\u001b\u001c\u0005\u0003\u0000\u0000\u001c\u0005\u0001\u0000"+
+		"\u0000\u0000\u001d!\u0005\u0004\u0000\u0000\u001e!\u0005\u0005\u0000\u0000"+
+		"\u001f!\u0001\u0000\u0000\u0000 \u001d\u0001\u0000\u0000\u0000 \u001e"+
+		"\u0001\u0000\u0000\u0000 \u001f\u0001\u0000\u0000\u0000!\u0007\u0001\u0000"+
+		"\u0000\u0000\u0004\f\u0015\u0019 ";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -1,4 +1,4 @@
 ID, Product, Description, Price
-P001, "Office Chair", "Chair, Red, Adjustable", 199.99
-P002, "Desk", "Wooden Desk", 250.50
-P003, "Lamp",, 45.00
+P001,"Office Chair","Chair, Red, Adjustable",199.99
+P002,"Desk","Wooden Desk",250.50
+P003,"Lamp",,45.00

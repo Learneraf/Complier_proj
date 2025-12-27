@@ -24,7 +24,7 @@ echo 解析器代码生成成功！
 
 :: 步骤2：编译所有Java文件
 echo.
-echo 2. 正在编译所有Java文件（UTF-8编码）...
+echo 2. 正在编译所有Java文件...
 javac -encoding UTF-8 -cp "%ANTLR_JAR_PATH%;." *.java
 if %errorlevel% neq 0 (
     echo 错误：编译Java文件失败！请检查LoadCSV.java是否存在。

@@ -7,88 +7,132 @@ import java.util.*;
 public class LoadCSV {
     // 自定义监听器，继承自 ANTLR 自动生成的 CSVBaseListener
     public static class Loader extends CSVBaseListener {
-        public static final String EMPTY = "";
         
-        // 【核心数据结构】存储最终结果：[ {Name="Jiang", Score="95"}, {...} ]
-        List<Map<String, String>> rows = new ArrayList<Map<String, String>>();
+        // 存储最终解析结果：一个列表，其中每个元素是一个代表一行数据的 Map
+        private final List<Map<String, String>> rows = new ArrayList<>();
+
+        // 存储从 CSV 文件第一行解析出的表头
+        private List<String> headers;
+
+        // 临时存储当前正在解析的行的所有字段值
+        private List<String> currentRowValues;
+
+        // 标志位，用于区分表头行和数据行
+        private boolean isHeaderProcessed = false;
         
-        // 临时存储表头：[ "StudentId", "Name", "Course", "Score" ]
-        List<String> header;
-        
-        // 临时存储当前正在处理的这一行的所有字段值
-        List<String> currentRowFieldValues;
+        // 标志位，用于判断当前字段是否已被 TEXT 或 STRING 规则填充
+        private boolean fieldHasValue = false;
 
-        // --- 下面是事件触发方法 ---
-
-        // 1. 每当解析到一个普通文本字段 (对应 # Text)
-        public void exitText(CSVParser.TextContext ctx) {
-            currentRowFieldValues.add(ctx.TEXT().getText());
-        }
-
-        // 2. 每当解析到一个带引号的字符串字段 (对应 # String)
-        public void exitString(CSVParser.StringContext ctx) {
-            currentRowFieldValues.add(ctx.STRING().getText());
-        }
-
-        // 3. 每当解析到一个空字段 (对应 # Empty)
-        public void exitEmpty(CSVParser.EmptyContext ctx) {
-            currentRowFieldValues.add(EMPTY);
-        }
-
-        // 4. 开始处理一行时，初始化临时列表
+        /**
+         * 每当解析器进入一个 'row' 规则时被调用。
+         * 这是初始化当前行数据存储的最佳时机。
+         */
         public void enterRow(CSVParser.RowContext ctx) {
-            currentRowFieldValues = new ArrayList<String>();
+            currentRowValues = new ArrayList<>();
+            // 重置字段值标志位
+            fieldHasValue = false;
         }
 
-        // 5. 处理完一行时，将数据打包存入 rows
+        /**
+         * 每当解析器退出一个 'row' 规则时被调用。
+         * 这是处理和存储整行数据的最佳时机。
+         */
         public void exitRow(CSVParser.RowContext ctx) {
-            // 如果这一行是表头（hdr 规则内部也调用了 row），需要单独处理
-            // 通过父节点的规则索引来判断
-            if (ctx.getParent().getRuleIndex() == CSVParser.RULE_hdr) return;
-
-            // 将数据值与表头列名一一对应，存入 Map
-            Map<String, String> m = new LinkedHashMap<String, String>();
-            int i = 0;
-            for (String v : currentRowFieldValues) {
-                // 防止数据列比表头列多的情况导致越界
-                if (i < header.size()) {
-                    m.put(header.get(i), v);
+            // 如果表头尚未处理，则当前行为表头
+            if (!isHeaderProcessed) {
+                headers = new ArrayList<>(currentRowValues);
+                isHeaderProcessed = true;
+            } else {
+                // 如果是数据行，则将其转换为 Map 并存入结果列表
+                Map<String, String> rowMap = new LinkedHashMap<>();
+                for (int i = 0; i < headers.size(); i++) {
+                    // 防止数据列数少于表头列数导致的索引越界
+                    String value = i < currentRowValues.size() ? currentRowValues.get(i) : "";
+                    rowMap.put(headers.get(i), value);
                 }
-                i++;
+                rows.add(rowMap);
             }
-            rows.add(m);
         }
 
-        // 6. 处理完表头时，保存表头信息
-        public void exitHdr(CSVParser.HdrContext ctx) {
-            header = new ArrayList<String>();
-            header.addAll(currentRowFieldValues);
+        /**
+         * 每当解析器退出一个 'TEXT' 规则时被调用。
+         * 这对应于一个非引号、非空的文本字段。
+         */
+        public void exitText(CSVParser.TextContext ctx) {
+            currentRowValues.add(ctx.TEXT().getText());
+            fieldHasValue = true;
+        }
+
+        /**
+         * 每当解析器退出一个 'STRING' 规则时被调用。
+         * 这对应于一个带引号的字符串字段。
+         */
+        public void exitString(CSVParser.StringContext ctx) {
+            String quotedString = ctx.STRING().getText();
+            // 移除首尾的双引号，并将内部的两个双引号 ("") 替换为一个双引号 (")
+            String unquotedString = quotedString.substring(1, quotedString.length() - 1).replace("\"\"", "\"");
+            currentRowValues.add(unquotedString);
+            fieldHasValue = true;
+        }
+
+        /**
+         * 每当解析器退出一个 'field' 规则时被调用。
+         * 这个方法特别重要，因为它会在 TEXT 或 STRING 之后被调用，
+         * 并且也会在一个空字段（即规则 `field : | ;`）被匹配时被调用。
+         */
+        public void exitField(CSVParser.FieldContext ctx) {
+            // 如果字段不是由 TEXT 或 STRING 构成的（即它是一个空字段），
+            // 则向当前行的值列表中添加一个空字符串。
+            if (!fieldHasValue) {
+                currentRowValues.add("");
+            }
+            // 为下一个字段重置标志位
+            fieldHasValue = false;
+        }
+
+        /**
+         * 获取解析完成后的数据。
+         * @return 包含所有数据行的 List<Map<String, String>>
+         */
+        public List<Map<String, String>> getRows() {
+            return rows;
         }
     }
 
     public static void main(String[] args) throws Exception {
-        String inputFile = null;
-        if (args.length > 0) inputFile = args[0];
+        // 1. 设置输入流
+        // 如果命令行提供了文件名，则从文件读取；否则从标准输入读取
+        String inputFile = args.length > 0 ? args[0] : null;
         InputStream is = System.in;
-        if (inputFile != null) is = new FileInputStream(inputFile);
-        
-        // 标准流程：Lexer -> Token -> Parser -> Tree
-        CSVLexer lexer = new CSVLexer(new ANTLRInputStream(is));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        CSVParser parser = new CSVParser(tokens);
-        parser.setBuildParseTree(true);
-        ParseTree tree = parser.file(); // 开始解析
+        if (inputFile != null) {
+            is = new FileInputStream(inputFile);
+        }
 
-        // 创建遍历器和监听器
+        // 2. 创建 CharStream
+        ANTLRInputStream input = new ANTLRInputStream(is);
+
+        // 3. 创建 Lexer
+        CSVLexer lexer = new CSVLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        // 4. 创建 Parser
+        CSVParser parser = new CSVParser(tokens);
+        parser.setBuildParseTree(true); // 确保构建解析树
+
+        // 5. 开始解析，从 'file' 规则开始
+        ParseTree tree = parser.file();
+
+        // 6. 创建监听器实例
+        Loader listener = new Loader();
+
+        // 7. 创建树遍历器，并使用监听器遍历解析树
         ParseTreeWalker walker = new ParseTreeWalker();
-        Loader loader = new Loader();
-        
-        // 开始“爬树”！
-        walker.walk(loader, tree);
-        
-        // 打印结果
-        System.out.println("成功加载 " + loader.rows.size() + " 行数据:");
-        for (Map<String, String> row : loader.rows) {
+        walker.walk(listener, tree);
+
+        // 8. 获取并打印结果
+        List<Map<String, String>> data = listener.getRows();
+        System.out.println("成功解析 " + data.size() + " 行数据:");
+        for (Map<String, String> row : data) {
             System.out.println(row);
         }
     }
